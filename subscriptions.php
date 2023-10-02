@@ -26,13 +26,39 @@
             </nav>
         </header>
         <div id="wrapper">
+        <?php
+            /**
+             * Cette page est TRES similaire à wall.php. 
+             * Vous avez sensiblement à y faire la meme chose.
+             * Il y a un seul point qui change c'est la requete sql.
+             */
+            /**
+             * Etape 1: Le mur concerne un utilisateur en particulier
+             */
+            $userId = intval($_GET['user_id']);
+            ?>
+            <?php
+            /**
+             * Etape 2: se connecter à la base de donnée
+             */
+            $mysqli = new mysqli("localhost", "root", "root", "socialnetwork");
+            ?>
             <aside>
+            <?php
+                /**
+                 * Etape 3: récupérer le nom de l'utilisateur
+                 */
+                $laQuestionEnSql = "SELECT * FROM `users` WHERE id= '$userId' ";
+                $lesInformations = $mysqli->query($laQuestionEnSql);
+                $user = $lesInformations->fetch_assoc();
+                //@todo: afficher le résultat de la ligne ci dessous, remplacer XXX par l'alias et effacer la ligne ci-dessous
+                
+                ?>
                 <img src="user.jpg" alt="Portrait de l'utilisatrice"/>
                 <section>
                     <h3>Présentation</h3>
                     <p>Sur cette page vous trouverez la liste des personnes dont
-                        l'utilisatrice
-                        n° <?php echo intval($_GET['user_id']) ?>
+                        l'utilisatrice <?php echo $user["alias"] ?>
                         suit les messages
                     </p>
 
@@ -40,10 +66,6 @@
             </aside>
             <main class='contacts'>
                 <?php
-                // Etape 1: récupérer l'id de l'utilisateur
-                $userId = intval($_GET['user_id']);
-                // Etape 2: se connecter à la base de donnée
-                $mysqli = new mysqli("localhost", "root", "root", "socialnetwork");
                 // Etape 3: récupérer le nom de l'utilisateur
                 $laQuestionEnSql = "
                     SELECT users.* 
@@ -55,12 +77,14 @@
                 $lesInformations = $mysqli->query($laQuestionEnSql);
                 // Etape 4: à vous de jouer
                 //@todo: faire la boucle while de parcours des abonnés et mettre les bonnes valeurs ci dessous 
+                while($followings = $lesInformations->fetch_assoc()){
                 ?>
                 <article>
                     <img src="user.jpg" alt="blason"/>
-                    <h3>Alexandra</h3>
-                    <p>id:654</p>                    
+                    <h3><?= $followings['alias'] ?></h3>
+                    <p><?= $followings['id'] ?></p>                    
                 </article>
+                <?php }?>
             </main>
         </div>
     </body>
