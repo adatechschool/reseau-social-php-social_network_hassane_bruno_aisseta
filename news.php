@@ -112,7 +112,7 @@
                         </div>
                         <footer>
                             <small>♥ <?= $post['like_number']?> </small>
-                            <a href="">#<?= $post['taglist']?></a>,
+                            <a href="<?= "#" .  $post["taglist"]?>">#<?= $post['taglist']?></a>,
                         </footer>
                     </article>
                     <?php
