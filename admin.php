@@ -94,7 +94,6 @@
                  */
                 while ($tag = $lesInformations->fetch_assoc())
                 {
-                 
                     ?>
                     <article>
                         <h3><?= $tag["alias"]?></h3>
