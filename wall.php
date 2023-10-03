@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!doctype html>
 <html lang="fr">
     <head>
@@ -10,9 +13,9 @@
         <header>
             <img src="resoc.jpg" alt="Logo de notre réseau social"/>
             <nav id="menu">
-                <a href="news.php">Actualités</a>
-                <a href="wall.php?user_id=5">Mur</a>
-                <a href="feed.php?user_id=5">Flux</a>
+            <a href="news.php">Actualités</a>
+                <a href=<?="wall.php?user_id=" .  $_SESSION['connected_id']?>>Mur</a>
+                <a href=<?="feed.php?user_id=" .  $_SESSION['connected_id']?>>Flux</a>
                 <a href="tags.php?tag_id=1">Mots-clés</a>
             </nav>
             <nav id="user">
@@ -63,6 +66,45 @@
                 </section>
             </aside>
             <main>
+                <?php   
+                if(isset( $_SESSION['connected_id'])){
+
+                    if(isset($_POST["message"])){
+
+                        $laQuestionPostEnSql = "INSERT INTO posts " 
+                        . "(id, user_id, content, created, parent_id) " 
+                        . "VALUES(NULL, "
+                        .  $_SESSION['connected_id']
+                        .", '" 
+                        . $_POST["message"]
+                        . "', "
+                        . "NOW(), "
+                        . "NULL);"
+                        ;
+    
+                        echo $laQuestionPostEnSql;
+    
+                        $ok = $mysqli->query($laQuestionPostEnSql);
+                        if ( ! $ok)
+                        {
+                            echo "Impossible d'ajouter le message: " . $mysqli->error;
+                        } else
+                        {
+                            echo "Message posté en tant que :" . $user["alias"];
+                        }
+                    }
+                        
+                ?>
+                <form style="background-color: white; margin-bottom: 20px;" action=<?= "wall.php?user_id=" . $_SESSION['connected_id']?> method="post">
+                            <input type='hidden' name='???' value='achanger'>
+                            <dl>
+                                <dt><label for='message'>Message</label></dt>
+                                <dd><textarea name='message'></textarea></dd>
+                            </dl>
+                            <input type='submit'>
+                        </form> 
+                        
+                        <?php }?>
                 <?php
                 /**
                  * Etape 3: récupérer tous les messages de l'utilisatrice
@@ -88,6 +130,8 @@
                 /**
                  * Etape 4: @todo Parcourir les messsages et remplir correctement le HTML avec les bonnes valeurs php
                  */
+            
+                 
                 while ($post = $lesInformations->fetch_assoc())
                 {
                     ?>                
