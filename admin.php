@@ -92,7 +92,7 @@
                 {
                     ?>
                     <article>
-                        <h3><?= $tag["alias"]?></h3>
+                        <h3><a href="<?= "wall.php?user_id=" . $tag["id"]?>"><?= $tag["alias"]?></a></h3> 
                         <p><?= $tag["id"]?></p>
                         <nav>
                             <a href="<?= "wall.php?user_id=" . $tag["id"]?>">Mur</a>
