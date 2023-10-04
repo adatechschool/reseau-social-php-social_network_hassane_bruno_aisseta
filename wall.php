@@ -64,10 +64,23 @@ session_start();
                         (n° <?php echo $userId ?>)
                     </p>
                 </section>
+                <?php
+                    if($_SESSION['connected_id'] != $userId){
+                       if(isset($_POST["button1"])){
+                        echo "ok ok ";
+                       }
+                    
+                ?>
+                    <form action=<?= "wall.php?user_id=" . $userId?> method="post">
+                        <input type="hidden" name="user_id" value=<?=$userId?>>
+                        <input type="hidden" name= "current_user_id" value=<?=$_SESSION['connected_id']?>>
+                        <input type="submit" name="button1" value="S'abonner"/>
+               </form>
+                <?php } ?>
             </aside>
             <main>
                 <?php   
-                if(isset( $_SESSION['connected_id'])){
+                if(isset( $_SESSION['connected_id']) &&  $_SESSION['connected_id'] == $userId){
 
                     if(isset($_POST["message"])){
 
