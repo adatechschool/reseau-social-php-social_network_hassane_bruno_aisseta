@@ -67,8 +67,27 @@ session_start();
                 <?php
                     if($_SESSION['connected_id'] != $userId){
                        if(isset($_POST["button1"])){
-                        echo "ok ok ";
+                        $laQuestionFollowers = " INSERT INTO followers "
+                        . "(id, followed_user_id, following_user_id) "
+                        . "VALUES(NULL, "
+                        . $_POST['user_id'] 
+                        . ", "
+                        . $_POST['current_user_id'] 
+                        . ');'
+                        ;
+
+                        echo $laQuestionFollowers;
+        
+                        $ok = $mysqli->query($laQuestionFollowers);
+                        if ( ! $ok)
+                        {
+                            echo "Impossible d'ajouter l'abonnement: " . $mysqli->error;
+                        } else
+                        {
+                            echo "abonné à :" . $user["alias"];
+                        }
                        }
+
                     
                 ?>
                     <form action=<?= "wall.php?user_id=" . $userId?> method="post">
