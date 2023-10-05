@@ -109,7 +109,7 @@ session_start();
                         }
                     }
                     ?>                     
-                    <form action="login.php" method="post">
+                    <form action="index.php" method="post">
                         <input type='hidden'name='id' value='<?=$_SESSION['connected_id']?>'>
                         <dl>
                             <dt><label for='email'>E-Mail</label></dt>
