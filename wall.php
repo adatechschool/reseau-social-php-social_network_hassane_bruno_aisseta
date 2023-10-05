@@ -98,6 +98,35 @@ session_start();
                 <?php } ?>
             </aside>
             <main>
+
+            <?php
+                    if($_SESSION['connected_id'] != $userId && isset($_POST["message_id"])){
+                        echo "ok";
+                       
+                         $message_id = $_POST["message_id"];
+                         $user_id = $_SESSION['connected_id'];
+                         
+                         echo $message_id;
+                        
+
+                         $check_likes = "SELECT * FROM likes WHERE post_id = '$message_id' AND user_id = '$user_id'";
+                         $result = $mysqli->query($check_likes);
+
+                         print_r ($result,1);
+
+
+                         if ($result->num_rows == 0) {
+
+                            $insert_query = "INSERT INTO likes (post_id, user_id) VALUES ('$message_id', '$user_id')";
+                    
+                            if ($mysqli->query($insert_query) === TRUE) {
+                                echo "Vous avez aimé ce message.";
+                            } else {
+                                echo "Erreur lors du like : " . $mysqli->error;
+                            }
+                        }     
+                    }
+                ?>
                 <?php   
                 if(isset( $_SESSION['connected_id']) &&  $_SESSION['connected_id'] == $userId){
 
@@ -127,7 +156,7 @@ session_start();
                     }
                         
                 ?>
-                <form style="background-color: white; margin-bottom: 20px;" action=<?= "wall.php?user_id=" . $_SESSION['connected_id']?> method="post">
+                <form style="background-color: white; margin-bottom: 20px;" action=<?= "wall.php?user_id=" . $userId?> method="post">
                             <input type='hidden' name='???' value='achanger'>
                             <dl>
                                 <dt><label for='message'>Message</label></dt>
@@ -142,7 +171,7 @@ session_start();
                  * Etape 3: récupérer tous les messages de l'utilisatrice
                  */
                 $laQuestionEnSql = "
-                    SELECT posts.content, posts.created, users.alias as author_name, 
+                    SELECT posts.id, posts.content, posts.created, users.alias as author_name, 
                     COUNT(likes.id) as like_number, GROUP_CONCAT(DISTINCT tags.label) AS taglist 
                     FROM posts
                     JOIN users ON  users.id=posts.user_id
@@ -162,8 +191,8 @@ session_start();
                 /**
                  * Etape 4: @todo Parcourir les messsages et remplir correctement le HTML avec les bonnes valeurs php
                  */
-            
-                 
+                
+              
                 while ($post = $lesInformations->fetch_assoc())
                 {
                     ?>                
@@ -176,14 +205,19 @@ session_start();
                             <p><?= $post["content"] ?></p>
                         </div>                                            
                         <footer>
+                            <form action=<?= "wall.php?user_id=" . $userId?> method="post">
+                            <input type="hidden" name="message_id" value="<?php echo $post["id"]; ?>">
+                            <input type="submit" name="likes" value="J'aime"/>  
                             <small>♥ <?= $post["like_number"]?></small>
+                            </form>
                             <a href="">#<?= $post["taglist"]?></a>
                           
                         </footer>
                     </article>
+
                 <?php } ?>
 
-
+                 
             </main>
         </div>
     </body>
