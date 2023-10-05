@@ -1,6 +1,9 @@
 <?php
 session_start();
-?>
+
+
+
+?> 
 <!doctype html>
 <html lang="fr">
     <head>
@@ -10,6 +13,9 @@ session_start();
         <link rel="stylesheet" href="style.css"/>
     </head>
     <body>
+    <?php 
+    if (isset($_SESSION['connected_id'])) {
+    ?> 
         <header>
             <img src="resoc.jpg" alt="Logo de notre réseau social"/>
             <nav id="menu">
@@ -101,5 +107,14 @@ session_start();
                 </article>
             </main>
         </div>
+        <?php
+
+            } else {
+            
+             
+               
+            
+            }?>
     </body>
+    
 </html>

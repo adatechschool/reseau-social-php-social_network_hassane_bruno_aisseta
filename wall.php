@@ -101,18 +101,18 @@ session_start();
 
             <?php
                     if($_SESSION['connected_id'] != $userId && isset($_POST["message_id"])){
-                        echo "ok";
+                       
                        
                          $message_id = $_POST["message_id"];
                          $user_id = $_SESSION['connected_id'];
                          
-                         echo $message_id;
+                         
                         
 
                          $check_likes = "SELECT * FROM likes WHERE post_id = '$message_id' AND user_id = '$user_id'";
                          $result = $mysqli->query($check_likes);
 
-                         print_r ($result,1);
+                       
 
 
                          if ($result->num_rows == 0) {
