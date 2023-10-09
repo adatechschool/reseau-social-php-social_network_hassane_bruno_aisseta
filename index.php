@@ -1,9 +1,7 @@
 <?php
 session_start();
-if (isset($_SESSION['connected_id'])) {
-    unset($_SESSION) ; 
+session_unset();
 
-}
 ?>
 <!doctype html>
 <html lang="fr">
@@ -112,10 +110,11 @@ if (isset($_SESSION['connected_id'])) {
                             // Etape 7 : Se souvenir que l'utilisateur s'est connecté pour la suite
                             // documentation: https://www.php.net/manual/fr/session.examples.basic.php
                             $_SESSION['connected_id']=$user['id'];
+                            header("Location: news.php");
                         }
                     }
                     ?>                     
-                    <form action="news.php" method="post">
+                    <form method="post">
                         <input type='hidden'name='id' value='<?=$_SESSION['connected_id']?>'>
                         <dl>
                             <dt><label for='email'>E-Mail</label></dt>
