@@ -13,12 +13,19 @@ session_start();
         <header>
             <img src="resoc.jpg" alt="Logo de notre réseau social"/>
             <nav id="menu">
-            <a href="news.php">Actualités</a>
+            <?php 
+             if (isset($_SESSION['connected_id'])) {
+
+            ?>
+
+                <a href="news.php">Actualités</a>
                 <a href=<?="wall.php?user_id=" .  $_SESSION['connected_id']?>>Mur</a>
                 <a href=<?="feed.php?user_id=" .  $_SESSION['connected_id']?>>Flux</a>
                 <a href="tags.php?tag_id=1">Mots-clés</a>
             </nav>
+           
             <nav id="user">
+
                 <a href="#">Profil</a>
                 <ul>
                     <li><a href=<?="settings.php?user_id=" .  $_SESSION['connected_id']?>>Paramètres</a></li>
@@ -28,6 +35,21 @@ session_start();
                 </ul>
 
             </nav>
+            <?php } else {   ?>
+
+                <a href="news.php">Actualités</a>
+                <a href="index.php">Mur</a>
+                <a href="index.php">Flux</a>
+                <a href="tags.php?tag_id=1">Mots-clés</a>
+            </nav>
+            <nav id="user">
+
+            <a href="index.php">Connexion</a>
+
+            </nav>
+            <?php 
+            }
+            ?>
         </header>
         <div id="wrapper">
             <?php
