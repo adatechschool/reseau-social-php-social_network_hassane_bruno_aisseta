@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (isset($_SESSION['connected_id'])) {
+    unset($_SESSION) ; 
+
+}
 ?>
 <!doctype html>
 <html lang="fr">
@@ -15,6 +19,7 @@ session_start();
             <nav id="menu">
             <?php 
              if (isset($_SESSION['connected_id'])) {
+
             ?>
 
                 <a href="news.php">Actualités</a>
@@ -30,6 +35,7 @@ session_start();
                     <li><a href=<?="settings.php?user_id=" .  $_SESSION['connected_id']?>>Paramètres</a></li>
                     <li><a href="followers.php?user_id=5">Mes suiveurs</a></li>
                     <li><a href="subscriptions.php?user_id=5">Mes abonnements</a></li>
+                    <li><a href="index.php">Déconnexion</a></li>
                 </ul>
 
             </nav>
@@ -109,7 +115,7 @@ session_start();
                         }
                     }
                     ?>                     
-                    <form action="index.php" method="post">
+                    <form action="news.php" method="post">
                         <input type='hidden'name='id' value='<?=$_SESSION['connected_id']?>'>
                         <dl>
                             <dt><label for='email'>E-Mail</label></dt>
