@@ -67,7 +67,12 @@ session_start();
                 </section>
                 <?php
 
-                $followers = "SELECT count(followed_user_id) FROM followers WHERE following_user_id = " . $_SESSION['connected_id']  . " AND followed_user_id = " . $userId; 
+                $followers = "SELECT count(followed_user_id) as num FROM followers WHERE following_user_id = " . $_SESSION['connected_id']  . " AND followed_user_id = " . $userId; 
+
+                $res= $mysqli->query($followers);
+                $counter= $res->fetch_assoc();
+                if (!$counter || $counter["num"]== 0){
+
 
                     if($_SESSION['connected_id'] != $userId){
                        if(isset($_POST["button1"])){
@@ -87,17 +92,18 @@ session_start();
                         } else
                         {
                             echo "abonné à :" . $user["alias"];
+                            header("Location: wall.php?user_id=" . $userId);
                         }
                        }
 
                     
                 ?>
-                    <form action=<?= "wall.php?user_id=" . $userId?> method="post">
+                    <form method="post">
                         <input type="hidden" name="user_id" value=<?=$userId?>>
                         <input type="hidden" name= "current_user_id" value=<?=$_SESSION['connected_id']?>>
                         <input type="submit" name="button1" value="S'abonner"/>
                </form>
-                <?php } ?>
+                <?php }} ?>
             </aside>
             <main>
 
