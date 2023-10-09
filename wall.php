@@ -77,8 +77,6 @@ session_start();
                         . ');'
                         ;
 
-                        echo $laQuestionFollowers;
-        
                         $ok = $mysqli->query($laQuestionFollowers);
                         if ( ! $ok)
                         {
