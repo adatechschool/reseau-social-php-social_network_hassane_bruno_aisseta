@@ -70,6 +70,13 @@ session_start();
             </aside>
             <main class='contacts'>
                 <?php
+
+                if (isset($_POST["button2"])){
+
+                    $delete = "DELETE FROM followers  WHERE followed_user_id='" . $_POST['followed_id'] . "' AND following_user_id='". $userId . "'";
+
+                    $result = $mysqli->query($delete);
+                }
                 // Etape 3: récupérer le nom de l'utilisateur
                 $laQuestionEnSql = "
                     SELECT users.* 
@@ -86,7 +93,12 @@ session_start();
                 <article>
                     <img src="user.jpg" alt="blason"/>
                     <h3><?= $followings['alias'] ?></h3>
-                    <p><?= $followings['id'] ?></p>                    
+                    <p><?= $followings['id'] ?></p>  
+                    
+                    <form action=" " method="post"> 
+                        <input type="hidden" name="followed_id" value="<?= $followings['id'] ?>"/> 
+                        <input type="submit" name="button2" value="Se désabonner"/>
+                    </form>         
                 </article>
                 <?php }?>
             </main>
