@@ -67,7 +67,7 @@ session_start();
                 </section>
                 <?php
 
-                $followers = "SELECT count(followed_user_id) FROM followers WHERE following_user_id = " . $_POST[current_user_id]  . " AND followed_user_id = " . $_POST[user_id]; 
+                //$followers = "SELECT count(followed_user_id) FROM followers WHERE following_user_id = " . $_POST[current_user_id]  . " AND followed_user_id = " . $_POST[user_id]; 
 
                     if($_SESSION['connected_id'] != $userId){
                        if(isset($_POST["button1"])){
