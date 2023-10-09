@@ -69,7 +69,7 @@ session_start();
                         <h3><?= $tag["label"]?></h3>
                         <p><?= $tag["id"]?></p>
                         <nav>
-                            <a href="tags.php?tag_id=321">Messages</a>
+                            <a href="tags.php?tag_id=<?= $tag["id"]?>">Messages</a>
                         </nav>
                     </article>
                 <?php } ?>

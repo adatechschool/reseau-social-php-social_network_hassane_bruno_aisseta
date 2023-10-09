@@ -11,11 +11,11 @@ session_start();
     </head>
     <body>
         <header>
-            <a href='admin.php'><img src="resoc.jpg" alt="Logo de notre réseau social"/></a>
-            <nav id="menu">
             <?php 
              if (isset($_SESSION['connected_id'])) {
-            ?>
+                 ?>
+                 <a href='admin.php'><img src="resoc.jpg" alt="Logo de notre réseau social"/></a>
+                 <nav id="menu">
 
                 <a href="news.php">Actualités</a>
                 <a href=<?="wall.php?user_id=" .  $_SESSION['connected_id']?>>Mur</a>
@@ -35,7 +35,8 @@ session_start();
 
             </nav>
             <?php } else {   ?>
-
+                <img src="resoc.jpg" alt="Logo de notre réseau social"/>
+                <nav id="menu">
                 <a href="news.php">Actualités</a>
                 <a href="index.php">Mur</a>
                 <a href="index.php">Flux</a>
