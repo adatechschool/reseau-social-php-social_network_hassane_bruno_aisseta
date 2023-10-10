@@ -97,7 +97,8 @@ session_start();
                     users.id,
                     users.alias as author_name,  
                     count(likes.id) as like_number,  
-                    GROUP_CONCAT(DISTINCT tags.label) AS taglist 
+                    GROUP_CONCAT(DISTINCT tags.label) AS taglist,
+                    GROUP_CONCAT(DISTINCT tags.id ORDER BY tags.label) AS tagId 
                     FROM posts
                     JOIN users ON  users.id=posts.user_id
                     LEFT JOIN posts_tags ON posts.id = posts_tags.post_id  
@@ -123,7 +124,7 @@ session_start();
                 {
                     //la ligne ci-dessous doit etre supprimée mais regardez ce 
                     //qu'elle affiche avant pour comprendre comment sont organisées les information dans votre 
-                    
+                    print_r($post);
 
                     // @todo : Votre mission c'est de remplacer les AREMPLACER par les bonnes valeurs
                     // ci-dessous par les bonnes valeurs cachées dans la variable $post 
@@ -141,7 +142,15 @@ session_start();
                         </div>
                         <footer>
                             <small>♥ <?= $post['like_number']?> </small>
-                            <a href="<?= "#" .  $post["taglist"]?>">#<?= $post['taglist']?></a>
+                            <?php  
+                            $tabOfTag= explode(',', $post["taglist"]);
+                            foreach( $tabOfTag as $valeur){
+                                if(trim($valeur)!=""){
+                                $tags = explode(",", $post["tagId"]);
+                                $tagIndex= array_search($valeur, $tabOfTag);
+                             ?> 
+                            <span> <a href=<?="tags.php?tag_id=" . $tags[$tagIndex]?>>#<?=$valeur?> </a></span>
+                            <?php }} ?>
                         </footer>
                     </article>
                     <?php
