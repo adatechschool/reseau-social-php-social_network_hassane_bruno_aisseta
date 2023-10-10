@@ -281,8 +281,25 @@ session_start();
                             <small>♥ <?= $post["like_number"]?></small>
                             </form>
                             
-                            <a href="">#<?= $post["taglist"]?></a>
-                          
+                            <?php  
+                            $tabOfTag= explode(',', $post["taglist"]);
+                        
+                           
+
+                            foreach( $tabOfTag as $valeur){
+                                if(trim($valeur)!=""){
+
+                                
+                             
+                             ?> 
+                            
+                             <span> <a href="#">#<?=$valeur?> </a></span>
+
+                             <?php 
+                               
+                             }}?> 
+                        
+                             
                         </footer>
                     </article>
 
