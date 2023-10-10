@@ -26,7 +26,6 @@ session_start();
                     <li><a href=<?="subscriptions.php?user_id=" .  $_SESSION['connected_id']?>>Mes abonnements</a></li>
                     <li><a href="index.php">Déconnexion</a></li>
                 </ul>
-
             </nav>
         </header>
         <div id="wrapper">
@@ -46,7 +45,6 @@ session_start();
              */
             include 'config.php';
             ?>
-
             <aside>
                 <?php
                 /**
@@ -56,7 +54,6 @@ session_start();
                 $lesInformations = $mysqli->query($laQuestionEnSql);
                 $user = $lesInformations->fetch_assoc();
                 //@todo: afficher le résultat de la ligne ci dessous, remplacer XXX par l'alias et effacer la ligne ci-dessous
-             
                 ?>
                 <img src="user.jpg" alt="Portrait de l'utilisatrice"/>
                 <section>
@@ -66,14 +63,10 @@ session_start();
                     </p>
                 </section>
                 <?php
-
                 $followers = "SELECT count(followed_user_id) as num FROM followers WHERE following_user_id = " . $_SESSION['connected_id']  . " AND followed_user_id = " . $userId; 
-
                 $res= $mysqli->query($followers);
                 $counter= $res->fetch_assoc();
                 if (!$counter || $counter["num"]== 0){
-
-
                     if($_SESSION['connected_id'] != $userId){
                        if(isset($_POST["button1"])){
                         $laQuestionFollowers = " INSERT INTO followers "
@@ -84,7 +77,6 @@ session_start();
                         . $_POST['current_user_id'] 
                         . ');'
                         ;
-
                         $ok = $mysqli->query($laQuestionFollowers);
                         if ( ! $ok)
                         {
@@ -95,8 +87,6 @@ session_start();
                             header("Location: wall.php?user_id=" . $userId);
                         }
                        }
-
-                    
                 ?>
                     <form method="post">
                         <input type="hidden" name="user_id" value=<?=$userId?>>
@@ -106,23 +96,12 @@ session_start();
                 <?php }} ?>
             </aside>
             <main>
-
             <?php
                     if($_SESSION['connected_id'] != $userId && isset($_POST["message_id"])){
-                       
-                       
                          $message_id = $_POST["message_id"];
                          $user_id = $_SESSION['connected_id'];
-                         
-                         
-                        
-
                          $check_likes = "SELECT * FROM likes WHERE post_id = '$message_id' AND user_id = '$user_id'";
                          $result = $mysqli->query($check_likes);
-
-                       
-
-
                          if ($result->num_rows == 0) {
 
                             $insert_query = "INSERT INTO likes (post_id, user_id) VALUES ('$message_id', '$user_id')";
@@ -136,25 +115,15 @@ session_start();
                     }
                 ?>
                 <?php   
-
-
-
             if(isset( $_SESSION['connected_id']) &&  $_SESSION['connected_id'] == $userId){
-    
                  if(isset($_POST["message"])){
-                        
                         $matches= [];
-                        
                         preg_match_all('/#[\p{L}]+/u', $_POST["message"],$matches);
-
                        // print_r($matches);
-
                         $lesTags= "SELECT * FROM tags"; 
                         $ok =$mysqli->query($lesTags);
-                        
                         $labels = array();
                         $ids = array();
-                        
                         if ($ok-> num_rows > 0){
                             while ($res = $ok->fetch_assoc()){
                                 $labels[] = $res['label'];
@@ -162,7 +131,6 @@ session_start();
                             }
                         }
                         $validId= array();
-                        
                         foreach ($matches[0] as $tag) {
                             $tag = str_replace('#' , "", $tag);
                             $index = array_search($tag, $labels);
@@ -176,9 +144,7 @@ session_start();
                                 //echo $index;
                                 //print_r($validId);
                             }
-                           
                         }
-
                         $laQuestionPostEnSql = "INSERT INTO posts " 
                         . "(id, user_id, content, created, parent_id) " 
                         . "VALUES(NULL, "
@@ -189,9 +155,7 @@ session_start();
                         . "NOW(), "
                         . "NULL);"
                         ;
-    
                         //echo $laQuestionPostEnSql;
-    
                         $ok = $mysqli->query($laQuestionPostEnSql);
                         if ( ! $ok)
                         {
@@ -201,19 +165,14 @@ session_start();
                             $params= 'SELECT max(id) as maximum FROM posts';
                             $ok = $mysqli->query($params);
                             $result = $ok->fetch_assoc();
-
                             foreach ($validId as $value) {
-
                                 $posttag = 'INSERT INTO posts_tags (id, post_id, tag_id) VALUES (NULL,' . $result['maximum'] . ' , ' . $ids[$value] . ')';
                                 $ok_insert= $mysqli->query($posttag);
                             }
-
                             //echo "Message posté en tant que :" . $user["alias"];
                             echo $result['maximum'];
-
                         }
                     }
-                        
                 ?>
                 <form style="background-color: white; margin-bottom: 20px;" action=<?= "wall.php?user_id=" . $userId?> method="post">
                             <input type='hidden' name='???' value='achanger'>
@@ -223,7 +182,6 @@ session_start();
                             </dl>
                             <input type='submit'>
                         </form> 
-                        
                         <?php }?>
                 <?php
                 /**
@@ -231,7 +189,7 @@ session_start();
                  */
                 $laQuestionEnSql = "
                     SELECT posts.id, posts.content, posts.created, users.alias as author_name, 
-                    COUNT(likes.id) as like_number, GROUP_CONCAT(DISTINCT tags.label) AS taglist 
+                    COUNT(likes.id) as like_number, GROUP_CONCAT(DISTINCT tags.id) as tagId, GROUP_CONCAT(DISTINCT tags.label) AS taglist 
                     FROM posts
                     JOIN users ON  users.id=posts.user_id
                     LEFT JOIN posts_tags ON posts.id = posts_tags.post_id  
@@ -246,14 +204,12 @@ session_start();
                 {
                     echo("Échec de la requete : " . $mysqli->error);
                 }
-
                 /**
                  * Etape 4: @todo Parcourir les messsages et remplir correctement le HTML avec les bonnes valeurs php
                  */
-                
-              
                 while ($post = $lesInformations->fetch_assoc())
                 {
+                    print_r($post);
                     ?>                
                     <article>
                         <h3>
@@ -261,18 +217,15 @@ session_start();
                         </h3>
                         <address>par  <?= $post["author_name"]?></address>
                         <div>
+
                         <?php
-                        
-                        
                         $tabOfP= explode('.', $post['content']);
                         //print_r($tabOfP);
-                        
                         foreach ($tabOfP as $value) {
                             if(trim($value)!=""){
                         ?>  
-
                             <p><?= $value ?>.</p>
-                            <?php }} ?> 
+                        <?php }} ?> 
                         </div>                                            
                         <footer>
                             <form action=<?= "wall.php?user_id=" . $userId?> method="post">
@@ -280,32 +233,18 @@ session_start();
                             <input type="submit" name="likes" value="J'aime"/>  
                             <small>♥ <?= $post["like_number"]?></small>
                             </form>
-                            
                             <?php  
                             $tabOfTag= explode(',', $post["taglist"]);
-                        
-                           
-
                             foreach( $tabOfTag as $valeur){
                                 if(trim($valeur)!=""){
-
-                                
-                             
+                                $tags = explode(",", $post["tagId"]);
+                                $tagIndex= array_search($valeur, $tabOfTag);
                              ?> 
-                            
-                             <span> <a href="#">#<?=$valeur?> </a></span>
-
-                             <?php 
-                               
-                             }}?> 
-                        
-                             
+                             <span> <a href=<?="tags.php?tag_id=" . $tags[$tagIndex]?>>#<?=$valeur?> </a></span>
+                             <?php }} ?> 
                         </footer>
                     </article>
-
                 <?php } ?>
-
-                 
             </main>
         </div>
     </body>
