@@ -152,36 +152,21 @@ session_start();
                         $lesTags= "SELECT * FROM tags"; 
                         $ok =$mysqli->query($lesTags);
                         
-                        $labels = [];
-                        while ($res = $ok->fetch_assoc()){
-                            
-                            array_push($labels, $res['label']);
-                            print_r(count($res['label']));
-                            
-                        };
-                        //print_r($labels);
-
-                       
-                       /*foreach ($matches as $key => $value) {
-                            $tag = str_replace('#' , "", $value);
-                            if (!in_array( $tag, $labels))  {
-                                print_r(count($tag));
+                        $labels = array();
+                        
+                        if ($ok-> num_rows > 0){
+                            while ($res = $ok->fetch_assoc()){
+                                $labels[] = $res['label'];
                             }
-
-                            //echo($tag);
-                            //print_r($value);
-
                         }
-                         
-                        for ($i=0; $i < count($matches); $i++){
-                            $tag = str_replace('#' , "", $matches[$i]);
 
-                            if (!in_array( $tag, $labels))  {
+                        foreach ($matches[0] as $tag) {
+                            $tag = str_replace('#' , "", $tag);
+                            if (!in_array($tag, $labels)) {
                                 echo $tag;
-                                
                             }
-                            echo $matches[$i];
-                        };*/
+                        }
+                        
 
                         
 
