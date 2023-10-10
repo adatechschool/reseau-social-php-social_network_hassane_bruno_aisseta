@@ -179,16 +179,6 @@ session_start();
                            
                         }
 
-
-                        
-                        
-
-                        
-
-
-                      
-                        
-
                         $laQuestionPostEnSql = "INSERT INTO posts " 
                         . "(id, user_id, content, created, parent_id) " 
                         . "VALUES(NULL, "
@@ -271,7 +261,18 @@ session_start();
                         </h3>
                         <address>par  <?= $post["author_name"]?></address>
                         <div>
-                            <p><?= $post["content"] ?></p>
+                        <?php
+                        
+                        
+                        $tabOfP= explode('.', $post['content']);
+                        //print_r($tabOfP);
+                        
+                        foreach ($tabOfP as $value) {
+                            if(trim($value)!=""){
+                        ?>  
+
+                            <p><?= $value ?>.</p>
+                            <?php }} ?> 
                         </div>                                            
                         <footer>
                             <form action=<?= "wall.php?user_id=" . $userId?> method="post">
@@ -279,6 +280,7 @@ session_start();
                             <input type="submit" name="likes" value="J'aime"/>  
                             <small>♥ <?= $post["like_number"]?></small>
                             </form>
+                            
                             <a href="">#<?= $post["taglist"]?></a>
                           
                         </footer>
