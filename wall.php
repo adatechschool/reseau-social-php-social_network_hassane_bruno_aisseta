@@ -136,9 +136,58 @@ session_start();
                     }
                 ?>
                 <?php   
-                if(isset( $_SESSION['connected_id']) &&  $_SESSION['connected_id'] == $userId){
 
-                    if(isset($_POST["message"])){
+
+
+            if(isset( $_SESSION['connected_id']) &&  $_SESSION['connected_id'] == $userId){
+    
+                 if(isset($_POST["message"])){
+                        
+                        $matches= [];
+                        
+                        preg_match_all('/#[\p{L}]+/u', $_POST["message"],$matches);
+
+                       // print_r($matches);
+
+                        $lesTags= "SELECT * FROM tags"; 
+                        $ok =$mysqli->query($lesTags);
+                        
+                        $labels = [];
+                        while ($res = $ok->fetch_assoc()){
+                            
+                            array_push($labels, $res['label']);
+                            print_r(count($res['label']));
+                            
+                        };
+                        //print_r($labels);
+
+                       
+                       /*foreach ($matches as $key => $value) {
+                            $tag = str_replace('#' , "", $value);
+                            if (!in_array( $tag, $labels))  {
+                                print_r(count($tag));
+                            }
+
+                            //echo($tag);
+                            //print_r($value);
+
+                        }
+                         
+                        for ($i=0; $i < count($matches); $i++){
+                            $tag = str_replace('#' , "", $matches[$i]);
+
+                            if (!in_array( $tag, $labels))  {
+                                echo $tag;
+                                
+                            }
+                            echo $matches[$i];
+                        };*/
+
+                        
+
+
+                      
+
 
                         $laQuestionPostEnSql = "INSERT INTO posts " 
                         . "(id, user_id, content, created, parent_id) " 
