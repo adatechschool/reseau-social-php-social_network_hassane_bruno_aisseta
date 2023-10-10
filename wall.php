@@ -153,26 +153,41 @@ session_start();
                         $ok =$mysqli->query($lesTags);
                         
                         $labels = array();
+                        $ids = array();
                         
                         if ($ok-> num_rows > 0){
                             while ($res = $ok->fetch_assoc()){
                                 $labels[] = $res['label'];
+                                $ids[]= $res['id'];
                             }
                         }
-
+                        $validId= array();
+                        
                         foreach ($matches[0] as $tag) {
                             $tag = str_replace('#' , "", $tag);
+                            $index = array_search($tag, $labels);
+                            //echo $index . "  ";
+                            echo $tag;
                             if (!in_array($tag, $labels)) {
-                                echo $tag;
+                                //echo $tag;
+                            }else {
+                                array_push($validId, $index);
+                                //echo $tag;
+                                //echo $index;
+                                //print_r($validId);
                             }
+                           
                         }
+
+
+                        
                         
 
                         
 
 
                       
-
+                        
 
                         $laQuestionPostEnSql = "INSERT INTO posts " 
                         . "(id, user_id, content, created, parent_id) " 
@@ -185,7 +200,7 @@ session_start();
                         . "NULL);"
                         ;
     
-                        echo $laQuestionPostEnSql;
+                        //echo $laQuestionPostEnSql;
     
                         $ok = $mysqli->query($laQuestionPostEnSql);
                         if ( ! $ok)
@@ -193,7 +208,19 @@ session_start();
                             echo "Impossible d'ajouter le message: " . $mysqli->error;
                         } else
                         {
-                            echo "Message posté en tant que :" . $user["alias"];
+                            $params= 'SELECT max(id) as maximum FROM posts';
+                            $ok = $mysqli->query($params);
+                            $result = $ok->fetch_assoc();
+
+                            foreach ($validId as $value) {
+
+                                $posttag = 'INSERT INTO posts_tags (id, post_id, tag_id) VALUES (NULL,' . $result['maximum'] . ' , ' . $ids[$value] . ')';
+                                $ok_insert= $mysqli->query($posttag);
+                            }
+
+                            //echo "Message posté en tant que :" . $user["alias"];
+                            echo $result['maximum'];
+
                         }
                     }
                         
