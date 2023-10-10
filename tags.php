@@ -15,17 +15,13 @@ session_start();
             <nav id="menu">
             <?php 
              if (isset($_SESSION['connected_id'])) {
-
             ?>
-
                 <a href="news.php">Actualités</a>
                 <a href=<?="wall.php?user_id=" .  $_SESSION['connected_id']?>>Mur</a>
                 <a href=<?="feed.php?user_id=" .  $_SESSION['connected_id']?>>Flux</a>
                 <a href="tags.php?tag_id=1">Mots-clés</a>
             </nav>
-           
             <nav id="user">
-
                 <a href="#">Profil</a>
                 <ul>
                     <li><a href=<?="settings.php?user_id=" .  $_SESSION['connected_id']?>>Paramètres</a></li>
@@ -33,19 +29,15 @@ session_start();
                     <li><a href=<?="subscriptions.php?user_id=" .  $_SESSION['connected_id']?>>Mes abonnements</a></li>
                     <li><a href="index.php">Déconnexion</a></li>
                 </ul>
-
             </nav>
             <?php } else {   ?>
-
                 <a href="news.php">Actualités</a>
                 <a href="index.php">Mur</a>
                 <a href="index.php">Flux</a>
                 <a href="tags.php?tag_id=1">Mots-clés</a>
             </nav>
             <nav id="user">
-
             <a href="index.php">Connexion</a>
-
             </nav>
             <?php 
             }
@@ -68,7 +60,6 @@ session_start();
              */
             include 'config.php';
             ?>
-
             <aside>
                 <?php
                 /**
@@ -86,7 +77,6 @@ session_start();
                         le mot-clé <?php echo $tag['label'] ?>
                         (n° <?php echo $tagId ?>)
                     </p>
-
                 </section>
             </aside>
             <main>
@@ -99,7 +89,8 @@ session_start();
                     posts.created,
                     users.alias as author_name,  
                     count(likes.id) as like_number,  
-                    GROUP_CONCAT(DISTINCT tags.label) AS taglist 
+                    GROUP_CONCAT(DISTINCT tags.label) AS taglist,
+                    GROUP_CONCAT(DISTINCT tags.id ORDER BY tags.label ASC) AS tagId
                     FROM posts_tags as filter 
                     JOIN posts ON posts.id=filter.post_id
                     JOIN users ON users.id=posts.user_id
@@ -115,7 +106,6 @@ session_start();
                 {
                     echo("Échec de la requete : " . $mysqli->error);
                 }
-
                 /**
                  * Etape 4: @todo Parcourir les messsages et remplir correctement le HTML avec les bonnes valeurs php
                  */
@@ -132,12 +122,18 @@ session_start();
                         </div>                                            
                         <footer>
                             <small>♥ <?php echo $post['like_number'] ?></small>
-                            <a href="">#<?= str_replace(",", " #",$post["taglist"])?></a>
+                            <?php  
+                            $tabOfTag= explode(',', $post["taglist"]);
+                            foreach( $tabOfTag as $valeur){
+                                if(trim($valeur)!=""){
+                                $tags = explode(",", $post["tagId"]);
+                                $tagIndex= array_search($valeur, $tabOfTag);
+                             ?> 
+                            <span> <a href=<?="tags.php?tag_id=" . $tags[$tagIndex]?>>#<?=$valeur?> </a></span>
+                            <?php }} ?>
                         </footer>
                     </article>
                 <?php } ?>
-
-
             </main>
         </div>
     </body>
