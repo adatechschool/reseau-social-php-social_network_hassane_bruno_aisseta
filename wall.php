@@ -287,7 +287,7 @@ session_start();
                            
 
                             foreach( $tabOfTag as $valeur){
-                                if(trim($valeur)!=""){
+                                if(trim($valeur!=""){
 
                                 
                              
