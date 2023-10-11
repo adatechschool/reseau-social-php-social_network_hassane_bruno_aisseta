@@ -39,6 +39,7 @@ session_start();
 
 
             <aside>
+
                 <img src="user.jpg" alt="Portrait de l'utilisatrice"/>
                 <section>
                     <h3>Présentation</h3>
@@ -49,6 +50,36 @@ session_start();
             </aside>
             <main>
                 <?php
+                if(isset($_FILES['profile_picture']) ) {
+                   $tailleMax = 2097152;
+                   $extensionsValides = array('jpg', 'jpeg', 'gif', 'png');
+
+                   print_r ($_FILES['profile_picture']);
+                   
+                   
+                   if($_FILES['avatar']['size'] <= $tailleMax) {
+                      $extensionUpload = strtolower(substr(strrchr($_FILES['avatar']['profile_picture'], '.'), 1));
+                      if(in_array($extensionUpload, $extensionsValides)) {
+                         $chemin = "membres/avatars/".$_SESSION['id'].".".$extensionUpload;
+                         $resultat = move_uploaded_file($_FILES['avatar']['tmp_name'], $chemin);
+                         if($resultat) {
+                            $updateavatar = $bdd->prepare('UPDATE membres SET avatar = :avatar WHERE id = :id');
+                            $updateavatar->execute(array(
+                               'avatar' => $_SESSION['id'].".".$extensionUpload,
+                               'id' => $_SESSION['id']
+                               ));
+                            header('Location: profil.php?id='.$_SESSION['id']);
+                         } else {
+                            $msg = "Erreur durant l'importation de votre photo de profil";
+                         }
+                      } else {
+                         $msg = "Votre photo de profil doit être au format jpg, jpeg, gif ou png";
+                      }
+                   } else {
+                      $msg = "Votre photo de profil ne doit pas dépasser 2Mo";
+                   }
+                }
+
                 /**
                  * Etape 1: Les paramètres concernent une utilisatrice en particulier
                  * La première étape est donc de trouver quel est l'id de l'utilisatrice
@@ -104,6 +135,11 @@ session_start();
                         <dt>Nombre de "J'aime" reçus</dt>
                         <dd><?= $user["totalrecieved"]?></dd>
                     </dl>
+
+                <form action=<?= "upload_profile_picture.php?user_id=" . $userId?> method="post" enctype="multipart/form-data">
+                    <input type="file" name="profile_picture" accept="image/*" required>
+                    <button type="submit" name="upload_profile_picture">Mettre à jour</button>
+                </form>
 
                 </article>
             </main>
