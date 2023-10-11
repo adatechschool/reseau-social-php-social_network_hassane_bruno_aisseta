@@ -116,7 +116,14 @@ session_start();
                             } else {
                                 echo "Erreur lors du like : " . $mysqli->error;
                             }
-                        }     
+                        } else{
+                            $delete_query = "DELETE FROM `likes` WHERE user_id={$_SESSION["connected_id"]} AND post_id='$message_id'";
+                            if ($mysqli->query($delete_query) === TRUE) {
+                                echo "Vous n'aimez plus ce message.";
+                            } else {
+                                echo "Erreur lors du like : " . $mysqli->error;
+                            }
+                        }   
                     }
                 ?>
                 <?php   
@@ -193,8 +200,11 @@ session_start();
                  * Etape 3: récupérer tous les messages de l'utilisatrice
                  */
                 $laQuestionEnSql = "
-                    SELECT posts.id, posts.content, posts.created, users.alias as author_name, 
-                    COUNT(likes.id) as like_number, GROUP_CONCAT(DISTINCT tags.id  ORDER BY tags.label) as tagId, GROUP_CONCAT(DISTINCT tags.label) AS taglist 
+                    SELECT posts.id, posts.content, posts.created, users.alias as author_name,
+                    COUNT(likes.id) as like_number, 
+                    GROUP_CONCAT(DISTINCT CASE WHEN likes.post_id = posts.id AND likes.user_id = {$_SESSION['connected_id']} THEN likes.id END) AS likeId,
+                    GROUP_CONCAT(DISTINCT tags.id  ORDER BY tags.label) as tagId, 
+                    GROUP_CONCAT(DISTINCT tags.label) AS taglist 
                     FROM posts
                     JOIN users ON  users.id=posts.user_id
                     LEFT JOIN posts_tags ON posts.id = posts_tags.post_id  
@@ -214,7 +224,6 @@ session_start();
                  */
                 while ($post = $lesInformations->fetch_assoc())
                 {
-                    print_r($post);
                     ?>                
                     <article>
                         <h3>
@@ -222,7 +231,6 @@ session_start();
                         </h3>
                         <address>par  <?= $post["author_name"]?></address>
                         <div>
-
                         <?php
                         $tabOfP= explode('.', $post['content']);
                         //print_r($tabOfP);
@@ -235,7 +243,11 @@ session_start();
                         <footer>
                             <form action=<?= "wall.php?user_id=" . $userId?> method="post">
                             <input type="hidden" name="message_id" value="<?php echo $post["id"]; ?>">
+                            <?if(!isset($post["likeId"])){?>
                             <input type="submit" name="likes" value="J'aime"/>  
+                            <?} else{?>
+                            <input type="submit" name="unlikes" value="Je n'aime plus"/>  
+                            <?}?>
                             <small>♥ <?= $post["like_number"]?></small>
                             </form>
                             <?php
