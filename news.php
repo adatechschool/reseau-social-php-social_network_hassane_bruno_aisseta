@@ -124,7 +124,7 @@ session_start();
                 {
                     //la ligne ci-dessous doit etre supprimée mais regardez ce 
                     //qu'elle affiche avant pour comprendre comment sont organisées les information dans votre 
-                    print_r($post);
+                  
 
                     // @todo : Votre mission c'est de remplacer les AREMPLACER par les bonnes valeurs
                     // ci-dessous par les bonnes valeurs cachées dans la variable $post 
@@ -140,7 +140,7 @@ session_start();
                         <div>
                             <p><?php echo $post['content'] ?></p>
                         </div>
-                        <footer>
+                        <footer></br>
                             <small>♥ <?= $post['like_number']?> </small>
                             <?php  
                             $tabOfTag= explode(',', $post["taglist"]);

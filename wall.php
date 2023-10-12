@@ -112,14 +112,14 @@ session_start();
                             $insert_query = "INSERT INTO likes (post_id, user_id) VALUES ('$message_id', '$user_id')";
                     
                             if ($mysqli->query($insert_query) === TRUE) {
-                                echo "Vous avez aimé ce message.";
+                               // echo "Vous avez aimé ce message.";
                             } else {
                                 echo "Erreur lors du like : " . $mysqli->error;
                             }
                         } else{
                             $delete_query = "DELETE FROM `likes` WHERE user_id={$_SESSION["connected_id"]} AND post_id='$message_id'";
                             if ($mysqli->query($delete_query) === TRUE) {
-                                echo "Vous n'aimez plus ce message.";
+                               // echo "Vous n'aimez plus ce message.";
                             } else {
                                 echo "Erreur lors du like : " . $mysqli->error;
                             }
@@ -182,17 +182,17 @@ session_start();
                                 $ok_insert= $mysqli->query($posttag);
                             }
                             //echo "Message posté en tant que :" . $user["alias"];
-                            echo $result['maximum'];
+                            //echo $result['maximum'];
                         }
                     }
                 ?>
-                <form style="background-color: white; margin-bottom: 20px;" action=<?= "wall.php?user_id=" . $userId?> method="post">
+                <form style="background-color: white; border-radius: 1em; margin-bottom: 20px; " action=<?= "wall.php?user_id=" . $userId?> method="post">
                             <input type='hidden' name='???' value='achanger'>
                             <dl>
                                 <dt><label for='message'>Message</label></dt>
-                                <dd><textarea name='message'></textarea></dd>
+                                <dd><textarea   style=" height: 150px; width:800px;" name='message'></textarea></dd>
                             </dl>
-                            <input type='submit'>
+                            <input type='submit' style="background-color:light-grey; border-radius:15px; height:35px; width:100px;">
                         </form> 
                         <?php }?>
                 <?php
@@ -241,13 +241,14 @@ session_start();
                         <?php }} ?> 
                         </div>                                            
                         <footer>
+                        
                             <form action=<?= "wall.php?user_id=" . $userId?> method="post">
                             <input type="hidden" name="message_id" value="<?php echo $post["id"]; ?>">
-                            <?if(!isset($post["likeId"])){?>
+                            <?php if(!isset($post["likeId"])) { ?>
                             <input type="submit" name="likes" value="J'aime"/>  
-                            <?} else{?>
+                            <?php } else { ?>
                             <input type="submit" name="unlikes" value="Je n'aime plus"/>  
-                            <?}?>
+                            <?php } ?>
                             <small>♥ <?= $post["like_number"]?></small>
                             </form>
                             <?php
@@ -258,7 +259,8 @@ session_start();
                                 $tagIndex= array_search($valeur, $tabOfTag);
                              ?> 
                              <span> <a href=<?="tags.php?tag_id=" . $tags[$tagIndex]?>>#<?=$valeur?> </a></span>
-                             <?php }} ?> 
+                             <?php }} ?>
+                     
                         </footer>
                     </article>
                 <?php } ?>

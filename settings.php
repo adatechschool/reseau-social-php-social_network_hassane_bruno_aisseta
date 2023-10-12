@@ -50,35 +50,7 @@ session_start();
             </aside>
             <main>
                 <?php
-                if(isset($_FILES['profile_picture']) ) {
-                   $tailleMax = 2097152;
-                   $extensionsValides = array('jpg', 'jpeg', 'gif', 'png');
-
-                   print_r ($_FILES['profile_picture']);
-                   
-                   
-                   if($_FILES['avatar']['size'] <= $tailleMax) {
-                      $extensionUpload = strtolower(substr(strrchr($_FILES['avatar']['profile_picture'], '.'), 1));
-                      if(in_array($extensionUpload, $extensionsValides)) {
-                         $chemin = "membres/avatars/".$_SESSION['id'].".".$extensionUpload;
-                         $resultat = move_uploaded_file($_FILES['avatar']['tmp_name'], $chemin);
-                         if($resultat) {
-                            $updateavatar = $bdd->prepare('UPDATE membres SET avatar = :avatar WHERE id = :id');
-                            $updateavatar->execute(array(
-                               'avatar' => $_SESSION['id'].".".$extensionUpload,
-                               'id' => $_SESSION['id']
-                               ));
-                            header('Location: profil.php?id='.$_SESSION['id']);
-                         } else {
-                            $msg = "Erreur durant l'importation de votre photo de profil";
-                         }
-                      } else {
-                         $msg = "Votre photo de profil doit être au format jpg, jpeg, gif ou png";
-                      }
-                   } else {
-                      $msg = "Votre photo de profil ne doit pas dépasser 2Mo";
-                   }
-                }
+               
 
                 /**
                  * Etape 1: Les paramètres concernent une utilisatrice en particulier
@@ -119,7 +91,49 @@ session_start();
                 /**
                  * Etape 4: à vous de jouer
                  */
-                //@todo: afficher le résultat de la ligne ci dessous, remplacer les valeurs ci-après puiseffacer la ligne ci-dessous
+                /*
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $targetDirectory = '/uploads/'; 
+                    $targetFile = $targetDirectory . basename($_FILES["image"]["name"]);
+                    $uploadOk = 1;
+                    $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+
+                    // Vérifier si le fichier est une image réelle
+                    $check = getimagesize($_FILES["image"]["tmp_name"]);
+                    if ($check === false) {
+                        echo "Le fichier n'est pas une image.";
+                        $uploadOk = 0;
+                    }
+
+                    // Vérifier la taille de l'image
+                    if ($_FILES["image"]["size"] > 5000000) {
+                        echo "L'image est trop grande. Veuillez choisir une image plus petite.";
+                        $uploadOk = 0;
+                    }
+
+                    // Autoriser certains formats d'image
+                    $allowedExtensions = array("jpg", "jpeg", "png", "gif");
+                    if (!in_array($imageFileType, $allowedExtensions)) {
+                        echo "Seuls les fichiers JPG, JPEG, PNG et GIF sont autorisés.";
+                        $uploadOk = 0;
+                    }
+
+                    // Vérifier si $uploadOk est à 0 à cause d'une erreur
+                    if ($uploadOk == 0) {
+                        echo "L'upload de votre image a échoué.";
+                    } else {
+                        // Tout est ok, essayer d'uploader l'image
+                        if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
+                            echo "L'image " . htmlspecialchars(basename($_FILES["image"]["name"])) . " a été téléchargée et enregistrée.";
+                        } else {
+                            echo "Une erreur est survenue lors de l'upload de votre image.";
+                        }
+                    }
+                }
+                */
+
+
+                
                 ?>                
                 <article class='parameters'>
                     <h3>Mes paramètres</h3>
@@ -136,10 +150,14 @@ session_start();
                         <dd><?= $user["totalrecieved"]?></dd>
                     </dl>
 
-                <form action=<?= "upload_profile_picture.php?user_id=" . $userId?> method="post" enctype="multipart/form-data">
-                    <input type="file" name="profile_picture" accept="image/*" required>
-                    <button type="submit" name="upload_profile_picture">Mettre à jour</button>
-                </form>
+                 <!--
+                    <form action="settings.php" method="post" enctype="multipart/form-data">
+                        <label for="image">Sélectionnez une image :</label>
+                        <input type="file" name="image" id="image" accept="image/*" required>
+                        <button type="submit" name="submit">Envoyer</button>
+                    </form>
+            -->
+                    
 
                 </article>
             </main>

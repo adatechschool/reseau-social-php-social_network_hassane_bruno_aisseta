@@ -1,6 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Londrina+Shadow&family=Poppins:wght@200;400&display=swap');
 body{
-    background-color: #003;
-    font-family: Arial;
+    background-color: rgb(187, 231, 218);
+    font-family: 'Poppins', sans-serif;
 }
 
 a{text-decoration: none; color:black;}
@@ -12,33 +13,37 @@ body>header{
     width:80em;
     margin:0 auto 2em auto;    
     padding:0;
+    border-radius: 1em;  
+
 
 }
 body>header img{
     height:5em;
+    border-radius: 1em;  
 }
 body>header #menu {
     display:flex;
     width:50%;
     align-items: stretch;
-    border-left: 1px solid #99b;
+   
 }
 body>header #menu a{
     flex:1;
     text-align: center;
     padding-top:2em;
-    border-right: 1px solid #99b;
+    
 }
 body>header a:hover
 {
-    background-color: #99b;
+    background-color: rgb(84, 84, 207);
+    border-radius: 1em;  
 }
 body>header ul{list-style: none;}
 body>header #user
 {
     margin-left: auto;
     flex:0.2;
-    border-left: 1px solid #99b;
+   
 }
 body>header #user>a{
     display:block;
@@ -53,7 +58,7 @@ body>header #user ul{
     margin:0;
     margin-left:-5em;
     background-color: #fff;
-    border: 1px solid #99b;
+    border: 1px solid rgb(143, 143, 255);
 
     z-index: 1;
 }
@@ -61,7 +66,7 @@ body>header #user ul li a{
     display:block;
     width:10em;
     padding:1em;
-    border-bottom: 1px solid #99b;
+    border-bottom: 1px solid rgb(143, 143, 255);
 }
 body>header #user:hover ul{
     display:block;
